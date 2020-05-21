@@ -2,6 +2,9 @@ import logging
 import numpy as np
 import pandas as pd
 
+# Spark imports
+from pyspark.sql import SparkSession
+
 
 class MovieRecommender():
     """Template class for a Movie Recommender system."""
@@ -9,7 +12,12 @@ class MovieRecommender():
     def __init__(self):
         """Constructs a MovieRecommender"""
         self.logger = logging.getLogger('reco-cs')
-        # ...
+        self.model = ALS(userCol='user',
+                itemCol='movie',
+                ratingCol='rating',
+                nonnegative=True,
+                regParam=0.1,
+                rank=10)
 
 
     def fit(self, ratings):
@@ -28,10 +36,22 @@ class MovieRecommender():
         """
         self.logger.debug("starting fit")
 
-        # ...
+        spark = SparkSession.builder.getOrCreate()
+        spark_df = spark.createDataFrame(ratings)
+        spark_df = spark_df.drop('timestamp')
+        
+#         # train/validation split
+#         train, validation = spark_df.randomSplit([0.8, 0.2])
+        self.recommender = self.model.fit(spark_df)
 
         self.logger.debug("finishing fit")
         return(self)
+    
+    def predicted_rating(user_id, movie_id):
+        user = recommender.userFactors.where(f'id == {user_id}').collect()[0]['features']
+        item = recommender.itemFactors.where(f'id == {movie_id}').collect()[0]['features']
+        
+        return np.dot(np.array(user), np.array(item))
 
 
     def transform(self, requests):
@@ -51,10 +71,13 @@ class MovieRecommender():
         self.logger.debug("starting predict")
         self.logger.debug("request count: {}".format(requests.shape[0]))
 
-        requests['rating'] = np.random.choice(range(1, 5), requests.shape[0])
+#         requests['rating'] = np.random.choice(range(1, 5), requests.shape[0])
+
+        for user, movie in requests:
 
         self.logger.debug("finishing predict")
         return(requests)
+        
 
 
 if __name__ == "__main__":

@@ -6,12 +6,14 @@ from ast import literal_eval
 
 
 
-def predicted_rating(user_id, movie_id):
+def predicted_rating(df_users, df_movies, user_id, movie_id):
     """
         Gets the user and movie features from the save csv files. 
         If user and/or movie not found, estimate latent features based on neighbors
         
         Inputs:
+        df_users: dataframe with stored latent features for users
+        df_movies: dataframe with stored latent features for movies
         user_id: int
         movie_id: int
         
@@ -21,13 +23,13 @@ def predicted_rating(user_id, movie_id):
     
     try:
         # Get features from df and turn from string into list
-        u_features = literal_eval(user_factors_df.loc[user_id, 'features'])
+        u_features = literal_eval(df_users.loc[user_id, 'features'])
         user = np.array(u_features)
     except:
         user = find_similar_users(user_id)
             
     try:
-        i_features = literal_eval(movie_factors_df.loc[movie_id, 'features'])
+        i_features = literal_eval(df_movies.loc[movie_id, 'features'])
         item = np.array(i_features)
     except:
         item = find_similar_items(movie_id)

@@ -4,3 +4,5 @@
 *.ipynb_checkpoints/*
 data/movies_sim_mat.csv
 data/users_sim_mat.csv
+data/validation_predictions.csv
+data/validation_predictions_factors.csv

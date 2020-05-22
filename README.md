@@ -17,15 +17,34 @@
 
 ## Introduction
 
-No one wants to waste their time watching movies and tv shows they don't enjoy. There has never been more choice with what movies and shows to watch and companies are eager to pull in users and generate more revenue. Competition for attention is fierce and more sophisticated technology is leading the way in both giving consumers what they want and in shaping shaping their tastes. Recommender systems are the basis of Netflix, a company that has been wildly successful in amassing a large subscription due to their tailored suggestions and high quality 
+No one wants to waste their time watching movies and tv shows they don't enjoy, but there are so many options for what movies to watch that consumers can struggle to make a decision. 
+Companies are eager to pull in users and generate more revenue and relatively newer players such as Netflix and Amazon have started producing their own movies and tv shows. Competition for attention is fierce and more sophisticated technology is leading the way in both giving consumers what they want and in shaping shaping their tastes. Recommender systems are the basis of Netflix, a company that has been wildly successful in amassing a large subscription due to their tailored suggestions and high quality programs (well, compared to reality television).
 
-Using the [MovieLens dataset](http://grouplens.org/datasets/movielens/). It includes movie
-information, user information, and the users' ratings. Your goal is to build a
-recommendation system and to suggest movies to users!
-
+We have built a movie recommender system based off of 800,000 reviews given by nearly 5400 users. The data comes from the [MovieLens dataset](http://grouplens.org/datasets/movielens/) and it includes movie information, user information, and the users' ratings. 
 
 
 ## Data Preparation and Exploratory Data Analysis
+
+The data did not require any cleaning prior to use, however we did have several different datasets that needed to be linked together to get final recommendations. 
+
+<b>Training Data</b><br>
+The training data contained a combined 800,000 reviews. Overall, there were 3662 movies reviewed and 5399 unique users. Most of the users rated over 1000 movies, but the majority rated fewer than 100. A breakdown of the count can be shown in the plot below.
+
+
+<img src='images/rating_count_by_user.png'>
+
+
+<b>Movie Data</b>
+
+<b>User Data</b>
+
+<b>Required Predictions</b>
+    
+    
+  
+ 
+
+
 
 
 - cold starts by count
@@ -59,6 +78,8 @@ recommendation system and to suggest movies to users!
 
 
 ## Statistical Analysis
+
+We split our training data up into a training and cross validation set in order to tune hyperparameters and pick an optimal error metric for assessing our recommender.
 
 ## Prediction Results
 

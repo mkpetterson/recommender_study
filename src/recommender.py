@@ -5,6 +5,7 @@ import pandas as pd
 # Spark imports
 from pyspark.sql import SparkSession
 from pyspark.ml.recommendation import ALS
+from ast import literal_eval
 
 
 class MovieRecommender():
@@ -78,14 +79,26 @@ class MovieRecommender():
         except:
             item = find_similar_items(movie_id)
 
-        return np.dot(np.array(user), np.array(item))
+        # Check if they are same shape
+        if user.shape == item.shape:
+            return np.dot(np.array(user), np.array(item))
+        else:
+            return -1
 
 
     def find_similar_users(user_id):
-        return -1
+        """
+        Finds similar users and returns best guess for laten features matrix
+                
+        """
+        return np.array(-1)
 
     def find_similar_items(movie_id):
-        return 1
+        """
+        Find similar movies and returns best guess for latent features matrix
+        
+        """
+        return np.array(1)
 
     
     def transform(self, requests):
@@ -105,11 +118,11 @@ class MovieRecommender():
         self.logger.debug("starting predict")
         self.logger.debug("request count: {}".format(requests.shape[0]))
 
-#         requests['rating'] = np.random.choice(range(1, 5), requests.shape[0])
+         requests['rating'] = np.random.choice(range(1, 5), requests.shape[0])
 
         # Get predicted ratings
-        requests['rating'] = requests.apply(lambda x: predicted_rating(x['user'], 
-                                                                       x['movie']), axis=1)
+#        requests['rating'] = requests.apply(lambda x: predicted_rating(x['user'], 
+#                                                                       x['movie']), axis=1)
 
 
         self.logger.debug("finishing predict")

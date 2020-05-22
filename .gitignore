@@ -2,3 +2,5 @@
 *.py[cod]
 */.ipynb_checkpoints/*
 *.ipynb_checkpoints/*
+data/movies_sim_mat.csv
+data/users_sim_mat.csv

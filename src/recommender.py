@@ -121,10 +121,18 @@ class MovieRecommender():
          requests['rating'] = np.random.choice(range(1, 5), requests.shape[0])
 
         # Get predicted ratings
+<<<<<<< HEAD
 #        requests['rating'] = requests.apply(lambda x: predicted_rating(x['user'], 
 #                                                                       x['movie']), axis=1)
 
 
+=======
+        requests['rating'] = requests.apply(lambda x: predicted_rating(x['user'], 
+                                                                       x['movie']), axis=1)
+    
+        
+        
+>>>>>>> 18218705b19447906767ad7bfa9f29bdce00891c
         self.logger.debug("finishing predict")
         return(requests)
         

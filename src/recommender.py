@@ -88,10 +88,28 @@ class MovieRecommender():
 
     def find_similar_users(user_id):
         """
-        Finds similar users and returns best guess for laten features matrix
-                
+        Finds similar users and returns best guess for cosine similarity matrix
+    
+        Inputs:
+        user_id: int
+            
         """
-        return np.array(-1)
+        if len(self.user_factors_df.colums) == 2:
+            self.user_factors_df.drop('Unnamed: 0', axis=1)
+    
+        similar_user_ids = self.users_sim_mat.loc[round(self.users_sim_mat[user_id].sort_values(ascending=False), 5) >= 1][1:].index.values
+    
+        users = []
+    
+        for i in similar_user_ids:
+            try:
+                u_features = literal_eval(self.user_factors_df.loc[i, 'features'])
+                user = np.array(u_features)
+                users.append(user)
+            except:
+                continue
+
+        return np.mean(users, axis=0)
 
 
     def find_similar_items(movie_id):

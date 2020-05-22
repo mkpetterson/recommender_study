@@ -4,6 +4,7 @@ import pandas as pd
 
 # Spark imports
 from pyspark.sql import SparkSession
+from pyspark.ml.recommendation import ALS
 
 
 class MovieRecommender():
@@ -18,7 +19,10 @@ class MovieRecommender():
                 nonnegative=True,
                 regParam=0.1,
                 rank=10)
-
+        
+        self.user_factors_df = pd.read_csv('data/user_factors.csv', index_col='id')
+        self.movie_factors_df = pd.read_csv('data/movie_factors.csv', index_col='id')
+        
 
     def fit(self, ratings):
         """
@@ -47,29 +51,43 @@ class MovieRecommender():
         self.logger.debug("finishing fit")
         return(self)
     
+    
     def predicted_rating(user_id, movie_id):
+        """
+        Gets the user and movie features from the save csv files. 
+        If user and/or movie not found, estimate latent features based on neighbors
+        
+        Inputs:
+        user_id: int
+        movie_id: int
+        
+        Returns:
+        predicted rating: float        
+        """
+        
         try:
-            user = self.recommender.userFactors.where(f'id == {user_id}').collect()[0]['features']
+            # Get features from df and turn from string into list
+            u_features = literal_eval(self.user_factors_df.loc[user_id, 'features'])
+            user = np.array(u_features)
         except:
             user = find_similar_users(user_id)
-            
+
         try:
-            item = self.recommender.itemFactors.where(f'id == {movie_id}').collect()[0]['features']
+            i_features = literal_eval(self.movie_factors_df.loc[movie_id, 'features'])
+            item = np.array(i_features)
         except:
             item = find_similar_items(movie_id)
 
-    
         return np.dot(np.array(user), np.array(item))
-    
-    
+
+
     def find_similar_users(user_id):
         return -1
-    
+
     def find_similar_items(movie_id):
         return 1
-    
-    
 
+    
     def transform(self, requests):
         """
         Predicts the ratings for a given set of requests.

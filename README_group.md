@@ -148,6 +148,14 @@ We approached this problem by calculating the cosine similarity between the non-
 
 ## Prediction Results
 
+- The RMSE on the validation set was 0.87 using the ALS model. 
+- Performance on the test data yielded a score of 4.04, out of a possible 5. 
+
+Below shows a violin plot of the predicted scores across the validation set for a given actual rating, showing the wide distributions of predicted ratings across all user-movie pairs.
+
+<img src='images/als_predicted_ratings.png'>
+
 ## Conclusion
 
+Our model performed fairly well, although we would like to do more feature engineering on the user and movie similarity functions in order to improve our cold start statistics. 
 

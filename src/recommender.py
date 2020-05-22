@@ -104,8 +104,8 @@ class MovieRecommender():
     def out_of_bounds(df):
         """Fixes predicted ratings that are > 5 or < 1
         """
-        df.loc[df['ratings']<1, 'rating'] = 1
-        df.loc[df['ratings']>5, 'rating'] = 5
+        df.loc[df['rating']<1, 'rating'] = 1
+        df.loc[df['rating']>5, 'rating'] = 5
         
         # Sort values and replace rating with title
         df = df.sort_values(by=['user', 'rating'], ascending=[True, False])
@@ -115,7 +115,7 @@ class MovieRecommender():
     
     
     
-    def get_movie_titles(movie_id):
+    def find_movie(movie_id):
         return 'movie'    
 
             

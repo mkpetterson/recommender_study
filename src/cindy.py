@@ -87,7 +87,7 @@ def users_sim_matrix(users_demo_df):
     users_demo_df.set_index('user_id', inplace=True)
                                   
     users_indices = pd.Series(users_demo_df.index)
-    users_sim_mat = pd.DataFrame(cosine_similarity(testing_users), index=users_indices,
+    users_sim_mat = pd.DataFrame(cosine_similarity(users_demo_df), index=users_indices,
                                  columns=users_indices)
     users_sim_mat.to_csv('data/users_sim_mat.csv')
     return 'users_sim_mat.csv saved.'
@@ -105,7 +105,7 @@ def find_similar_users(user_id):
     if len(self.user_factors_df.colums) == 2:
         self.user_factors_df.drop('Unnamed: 0', axis=1)
     
-    similar_user_ids = self.users_sim_mat.loc[round(self.users_sim_mat[user_id].sort_values(ascending=False), 5) >= 1][1:].index.values
+    similar_user_ids = self.users_sim_mat.loc[users_sim_mat[f'{user_id}'] >= 1, f'{user_id}'][1:].index.values
     
     users = []
     
@@ -128,7 +128,7 @@ def find_similar_items(movie_id):
     movie_id: int
     
     """
-    similar_movie_ids = self.movies_sim_mat.loc[round(self.movies_sim_mat[movie_id].sort_values(ascending=False), 5) >= 1][1:].index.values
+    similar_movie_ids = self.movies_sim_mat.loc[movies_sim_mat[f'{movie_id}'] >= 1, f'{movie_id}'][1:].index.values
     
     items = []
 

@@ -37,12 +37,12 @@ def predicted_rating(user_id, movie_id):
         u_features = literal_eval(self.user_factors_df.loc[user_id, 'features'])
         user = np.array(u_features)
     except:
-        user = find_similar_users(user_
+        user = find_similar_users(user_id)
     try:
         i_features = literal_eval(self.movie_factors_df.loc[movie_id, 'features'])
         item = np.array(i_features)
     except:
-        item = find_similar_items(movie_
+        item = find_similar_items(movie_id)
     # Check if they are same shape
     if user.shape == item.shape:
         return np.dot(np.array(user), np.array(item))
@@ -102,6 +102,7 @@ def find_similar_users(user_id):
     user_id: int
             
     """
+    
                                   
     
     return np.array(
@@ -113,4 +114,13 @@ def find_similar_items(movie_id):
     movie_id: int
     
     """
-    return np.array(1)
+    similar_movie_ids = self.movies_sim_mat.loc[round(self.movies_sim_mat[movie_id].sort_values(ascending=False), 5) >= 1][1:].index.values
+    
+    items = []
+
+    for i in similar_movie_ids:
+        i_features = literal_eval(movie_factors_df.loc[i, 'features'])
+        item = np.array(i_features)
+        items.append(item)
+
+    return np.mean(items, axis=0)

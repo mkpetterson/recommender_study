@@ -28,15 +28,50 @@ def predicted_rating(user_id, movie_id):
     else:
         return
                                   
+def movies_sim_matrix(movies_df):
+    """
+    Create cosine similarity matrix for movies using a DataFrame containing movies information.
+    Item-item similarity.
+    
+    Inputs:
+    movies_df: pandas DataFrame
+    
+    Outputs:
+    movies_sim_mat: pandas DataFrame
+    """
+    tf = TfidfVectorizer()
+    movies_tfidf = tf.fit_transform(movies_df['genre'])
+    movies_indices = pd.Series(movies_df.index)
+
+def users_sim_matrix(users_demo_df):
+    """
+    Create cosine similarity matrix for users using a DataFrame containing user demographic information.
+    User-user similarity.
+    
+    Inputs:
+    users_demo_df: pandas DataFrame
+    
+    Outputs:
+    users_sim_mat: pandas DataFrame
+    """
+                                  
 def find_similar_users(user_id):
     """
-    Finds similar users and returns best guess for laten features matrix
+    Finds similar users and returns best guess for cosine similarity matrix
+    
+    Inputs:
+    user_id: int
             
     """
+                                  
+    
     return np.array(
 def find_similar_items(movie_id):
     """
-    Find similar movies and returns best guess for latent features matrix
+    Find similar movies and returns best guess for cosine similarity matrix
+    
+    Inputs:
+    movie_id: int
     
     """
     return np.array(1)

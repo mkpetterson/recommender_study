@@ -93,12 +93,25 @@ class MovieRecommender():
         """
         return np.array(-1)
 
+
     def find_similar_items(movie_id):
         """
-        Find similar movies and returns best guess for latent features matrix
-        
+        Find similar movies and returns best guess for cosine similarity matrix
+    
+        Inputs:
+        movie_id: int
+    
         """
-        return np.array(1)
+        similar_movie_ids = self.movies_sim_mat.loc[round(self.movies_sim_mat[movie_id].sort_values(ascending=False), 5) >= 1][1:].index.values
+    
+        items = []
+
+        for i in similar_movie_ids:
+            i_features = literal_eval(movie_factors_df.loc[i, 'features'])
+            item = np.array(i_features)
+            items.append(item)
+
+        return np.mean(items, axis=0)
 
     
     def out_of_bounds(df):

@@ -106,6 +106,7 @@ def find_similar_users(user_id):
                                   
     
     return np.array(
+
 def find_similar_items(movie_id):
     """
     Find similar movies and returns best guess for cosine similarity matrix

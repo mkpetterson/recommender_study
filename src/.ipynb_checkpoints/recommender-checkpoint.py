@@ -4,6 +4,8 @@ import pandas as pd
 
 # Spark imports
 from pyspark.sql import SparkSession
+from pyspark.ml.recommendation import ALS
+from ast import literal_eval
 
 
 class MovieRecommender():
@@ -18,7 +20,10 @@ class MovieRecommender():
                 nonnegative=True,
                 regParam=0.1,
                 rank=10)
-
+        
+        self.user_factors_df = pd.read_csv('data/user_factors.csv', index_col='id')
+        self.movie_factors_df = pd.read_csv('data/movie_factors.csv', index_col='id')
+        
 
     def fit(self, ratings):
         """
@@ -47,29 +52,81 @@ class MovieRecommender():
         self.logger.debug("finishing fit")
         return(self)
     
+    
     def predicted_rating(user_id, movie_id):
+        """
+        Gets the user and movie features from the save csv files. 
+        If user and/or movie not found, estimate latent features based on neighbors
+        
+        Inputs:
+        user_id: int
+        movie_id: int
+        
+        Returns:
+        predicted rating: float        
+        """
+        
         try:
-            user = self.recommender.userFactors.where(f'id == {user_id}').collect()[0]['features']
+            # Get features from df and turn from string into list
+            u_features = literal_eval(self.user_factors_df.loc[user_id, 'features'])
+            user = np.array(u_features)
         except:
             user = find_similar_users(user_id)
-            
+
         try:
-            item = self.recommender.itemFactors.where(f'id == {movie_id}').collect()[0]['features']
+            i_features = literal_eval(self.movie_factors_df.loc[movie_id, 'features'])
+            item = np.array(i_features)
         except:
             item = find_similar_items(movie_id)
 
-    
-        return np.dot(np.array(user), np.array(item))
-    
-    
+        # Check if they are same shape
+        if user.shape == item.shape:
+            return np.dot(np.array(user), np.array(item))
+        else:
+            return -1
+
+
     def find_similar_users(user_id):
-        return -1
-    
+        """
+        Finds similar users and returns best guess for laten features matrix
+                
+        """
+        return np.array(-1)
+
+
     def find_similar_items(movie_id):
-        return 1
+        """
+        Find similar movies and returns best guess for cosine similarity matrix
     
+        Inputs:
+        movie_id: int
+    
+        """
+        similar_movie_ids = self.movies_sim_mat.loc[round(self.movies_sim_mat[movie_id].sort_values(ascending=False), 5) >= 1][1:].index.values
+    
+        items = []
+
+        for i in similar_movie_ids:
+            i_features = literal_eval(movie_factors_df.loc[i, 'features'])
+            item = np.array(i_features)
+            items.append(item)
+
+        return np.mean(items, axis=0)
+
+    
+    def out_of_bounds(df):
+        """Fixes predicted ratings that are > 5 or < 1
+        """
+        df.loc[df['rating']<1, 'rating'] = 1
+        df.loc[df['rating']>5, 'rating'] = 5
+        
+        # Sort values and replace rating with title
+        df = df.sort_values(by=['user', 'rating'], ascending=[True, False])
+                       
+        return df
     
 
+            
     def transform(self, requests):
         """
         Predicts the ratings for a given set of requests.
@@ -87,13 +144,16 @@ class MovieRecommender():
         self.logger.debug("starting predict")
         self.logger.debug("request count: {}".format(requests.shape[0]))
 
-#         requests['rating'] = np.random.choice(range(1, 5), requests.shape[0])
+        requests['rating'] = np.random.choice(range(1, 5), requests.shape[0])
 
         # Get predicted ratings
-        requests['rating'] = requests.apply(lambda x: predicted_rating(x['user'], 
-                                                                       x['movie']), axis=1)
+#        requests['rating'] = requests.apply(lambda x: predicted_rating(x['user'], 
+#                                                                       x['movie']), axis=1)
 
-        for user, movie in requests:
+        # Fix out of bounds ratings, create movie ranking
+#        requests = out_of_bounds(requests)
+
+
 
         self.logger.debug("finishing predict")
         return(requests)

@@ -125,6 +125,18 @@ We used Spark ALS as the basis for our recommender model. Training the model on 
 
 We split our training data up into a training and cross validation set in order to tune hyperparameters and pick an optimal error metric for assessing our recommender.
 
+### Finding Similarities for Users and Movies
+
+In order to computer the dot product of the user latent feature vector with the movie latent feature vector, we need to have those features. However, when a movie or user doesn't exist, we need another way of obtain those latent features.
+
+We approached this problem by calculating the cosine similarity between the non-existent user/movie and existing ones. We set a threshold of who/what the top similar users/movies are and calculated the average of their latent features. 
+
+<detail>
+    <summary>
+        <b>Users Cosine Similarity Matrix</b>  
+    </summary>
+    <img alt="users_sim_mat" src='images/users_cossim_mat.png'>
+</detail>
 
 
 ## Prediction Results

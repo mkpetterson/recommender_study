@@ -1,23 +1,11 @@
-class MovieRecommender():
-    """Template class for a Movie Recommender system."""
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
-    def __init__(self):
-        """Constructs a MovieRecommender"""
-        self.logger = logging.getLogger('reco-cs')
-        self.model = ALS(userCol='user',
-                itemCol='movie',
-                ratingCol='rating',
-                nonnegative=True,
-                regParam=0.1,
-                rank=10)
-        
-        self.user_factors_df = pd.read_csv('data/user_factors.csv', index_col='id')
-        self.movie_factors_df = pd.read_csv('data/movie_factors.csv', index_col='id')
-        
-        
-        # ADDITIONAL CODE FOR CSV TO ADD TO RECOMMENDER.PY
-        self.movies_sim_mat = pd.read_csv('data/movies_sim_mat.csv', index_col='movie_id')
-        self.users_sim_mat = pd.read_csv('data/users_sim_mat.csv', index_col='user_id')
+user_factors_df = pd.read_csv('data/user_factors_all.csv', index_col='id')
+movie_factors_df = pd.read_csv('data/movie_factors_all.csv', index_col='id')
+movies_sim_mat = pd.read_csv('data/movies_sim_mat.csv', index_col='movie_id')
+users_sim_mat = pd.read_csv('data/users_sim_mat.csv', index_col='user_id')
+
 
 def predicted_rating(user_id, movie_id):
     """
@@ -102,16 +90,16 @@ def find_similar_users(user_id):
     user_id: int
             
     """
-    if len(self.user_factors_df.colums) == 2:
-        self.user_factors_df.drop('Unnamed: 0', axis=1)
+    if len(user_factors_df.colums) == 2:
+        user_factors_df.drop('Unnamed: 0', axis=1)
     
-    similar_user_ids = self.users_sim_mat.loc[users_sim_mat[f'{user_id}'] >= 1, f'{user_id}'][1:].index.values
+    similar_user_ids = users_sim_mat.loc[users_sim_mat[f'{user_id}'] >= 1, f'{user_id}'][1:].index.values
     
     users = []
     
     for i in similar_user_ids:
         try:
-            u_features = literal_eval(self.user_factors_df.loc[i, 'features'])
+            u_features = user_factors_df.loc[i, 'features']
             user = np.array(u_features)
             users.append(user)
         except:
@@ -128,12 +116,12 @@ def find_similar_items(movie_id):
     movie_id: int
     
     """
-    similar_movie_ids = self.movies_sim_mat.loc[movies_sim_mat[f'{movie_id}'] >= 1, f'{movie_id}'][1:].index.values
+    similar_movie_ids = movies_sim_mat.loc[movies_sim_mat[f'{movie_id}'] >= 1, f'{movie_id}'][1:].index.values
     
     items = []
 
     for i in similar_movie_ids:
-        i_features = literal_eval(movie_factors_df.loc[i, 'features'])
+        i_features = movie_factors_df.loc[i, 'features']
         item = np.array(i_features)
         items.append(item)
 

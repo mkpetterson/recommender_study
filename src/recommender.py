@@ -92,8 +92,9 @@ class MovieRecommender():
         # Get predicted ratings
         requests['rating'] = requests.apply(lambda x: predicted_rating(x['user'], 
                                                                        x['movie']), axis=1)
-
-
+    
+        
+        
         self.logger.debug("finishing predict")
         return(requests)
         

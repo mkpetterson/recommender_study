@@ -101,6 +101,24 @@ class MovieRecommender():
         return np.array(1)
 
     
+    def out_of_bounds(df):
+        """Fixes predicted ratings that are > 5 or < 1
+        """
+        df.loc[df['ratings']<1, 'rating'] = 1
+        df.loc[df['ratings']>5, 'rating'] = 5
+        
+        # Sort values and replace rating with title
+        df = df.sort_values(by=['user', 'rating'], ascending=[True, False])
+        df['movie'] = df.apply(lambda x: find_movie(x['movie']), axis=1)
+                
+        return df
+    
+    
+    
+    def get_movie_titles(movie_id):
+        return 'movie'    
+
+            
     def transform(self, requests):
         """
         Predicts the ratings for a given set of requests.
@@ -118,21 +136,17 @@ class MovieRecommender():
         self.logger.debug("starting predict")
         self.logger.debug("request count: {}".format(requests.shape[0]))
 
-         requests['rating'] = np.random.choice(range(1, 5), requests.shape[0])
+        requests['rating'] = np.random.choice(range(1, 5), requests.shape[0])
 
         # Get predicted ratings
-<<<<<<< HEAD
 #        requests['rating'] = requests.apply(lambda x: predicted_rating(x['user'], 
 #                                                                       x['movie']), axis=1)
 
+        # Fix out of bounds ratings, create movie ranking
+#        requests = out_of_bounds(requests)
 
-=======
-        requests['rating'] = requests.apply(lambda x: predicted_rating(x['user'], 
-                                                                       x['movie']), axis=1)
-    
-        
-        
->>>>>>> 18218705b19447906767ad7bfa9f29bdce00891c
+
+
         self.logger.debug("finishing predict")
         return(requests)
         

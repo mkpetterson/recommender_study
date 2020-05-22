@@ -93,7 +93,6 @@ class MovieRecommender():
         requests['rating'] = requests.apply(lambda x: predicted_rating(x['user'], 
                                                                        x['movie']), axis=1)
 
-        for user, movie in requests:
 
         self.logger.debug("finishing predict")
         return(requests)

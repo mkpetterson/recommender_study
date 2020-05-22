@@ -70,6 +70,7 @@ def movies_sim_matrix(movies_df):
     movies_sim_mat = pd.DataFrame(cosine_similarity(movies_tfidf), index=movies_indices,
                                   columns=movies_indices)
     movies_sim_mat.to_csv('data/movies_sim_mat.csv')
+    return 'movies_sim_mat.csv saved.'
     
 
 def users_sim_matrix(users_demo_df):
@@ -83,7 +84,13 @@ def users_sim_matrix(users_demo_df):
     Outputs:
     users_sim_mat: pandas DataFrame
     """
-
+    users_demo_df.set_index('user_id', inplace=True)
+                                  
+    users_indices = pd.Series(users_demo_df.index)
+    users_sim_mat = pd.DataFrame(cosine_similarity(testing_users), index=users_indices,
+                                 columns=users_indices)
+    users_sim_mat.to_csv('data/users_sim_mat.csv')
+    return 'users_sim_mat.csv saved.'
                                   
                                   
 # FINDING SIMILIARTY CODE TO ADD TO RECOMMENDER.PY

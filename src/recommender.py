@@ -109,14 +109,9 @@ class MovieRecommender():
         
         # Sort values and replace rating with title
         df = df.sort_values(by=['user', 'rating'], ascending=[True, False])
-        df['movie'] = df.apply(lambda x: find_movie(x['movie']), axis=1)
-                
+                       
         return df
     
-    
-    
-    def find_movie(movie_id):
-        return 'movie'    
 
             
     def transform(self, requests):

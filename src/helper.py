@@ -45,21 +45,21 @@ def find_similar_items(movie_id):
 
 
 def out_of_bounds(df):
-    """Fixes predicted ratings that are > 5 or < 1
+    """
+    1. Fixes predicted ratings that are > 5 or < 1
+    2. Order ratings and find movie titles associated with movie id
+    
+    Returns dataframe
+
     """
     df.loc[df['rating']<1, 'rating'] = 1
     df.loc[df['rating']>5, 'rating'] = 5
         
     # Sort values and replace rating with title
     df = df.sort_values(by=['user', 'rating'], ascending=[True, False])
-    df['movie'] = df.apply(lambda x: find_movie(x['movie']), axis=1)
                 
     return df    
     
-    
-def find_movie(movie_id):
-    return 'movie' 
-
 
 def transform(self, requests):
     """

@@ -23,22 +23,26 @@ def predicted_rating(df_users, df_movies, user_id, movie_id):
     
     try:
         # Get features from df and turn from string into list
-        u_features = literal_eval(df_users.loc[user_id, 'features'])
-        user = np.array(u_features)
+        user = np.array(df_user.loc[user_id, 'features'])
     except:
         user = find_similar_users(user_id)
-            
+        
     try:
-        i_features = literal_eval(df_movies.loc[movie_id, 'features'])
-        item = np.array(i_features)
+        item = np.array(df_movies.loc[movie_id, 'features'])
     except:
         item = find_similar_items(movie_id)
+
         
     if user.shape == item.shape:
         return np.dot(np.array(user), np.array(item))
     else:
         return -1    
     
+def find_similar_users(user_id):
+    return np.array(-1)
+    
+def find_similar_items(movie_id):
+    return np.array(1)
 def find_similar_users(user_id):
     return np.array(-1)
     

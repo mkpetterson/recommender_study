@@ -132,7 +132,9 @@ In order to computer the dot product of the user latent feature vector with the 
 We approached this problem by calculating the cosine similarity between the non-existent user/movie and existing ones. We set a threshold of who/what the top similar users/movies are and calculated the average of their latent features. 
 
 <detail>
-    <summary>Users Cosine Similarity Matrix</summary>
+    <summary>
+        <b>Users Cosine Similarity Matrix</b>  
+    </summary>
     <img alt="users_sim_mat" src='images/users_cossim_mat.png'>
 </detail>
 

@@ -23,7 +23,7 @@ def predicted_rating(df_users, df_movies, user_id, movie_id):
     
     try:
         # Get features from df and turn from string into list
-        user = np.array(df_user.loc[user_id, 'features'])
+        user = np.array(df_users.loc[user_id, 'features'])
     except:
         user = find_similar_users(user_id)
         

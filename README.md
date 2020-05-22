@@ -17,6 +17,11 @@
 
 ## Introduction
 
+No one wants to waste their time watching movies and tv shows they don't enjoy. There has never been more choice with what movies and shows to watch and companies are eager to pull in users and generate more revenue. Competition for attention is fierce and more sophisticated technology is leading the way in both giving consumers what they want and in shaping shaping their tastes. Recommender systems are the basis of Netflix, a company that has been wildly successful in amassing a large subscription due to their tailored suggestions and high quality 
+
+Using the [MovieLens dataset](http://grouplens.org/datasets/movielens/). It includes movie
+information, user information, and the users' ratings. Your goal is to build a
+recommendation system and to suggest movies to users!
 
 
 
